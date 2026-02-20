@@ -54,8 +54,10 @@ Requirements:
 - Generate realistic, well-structured content based on the prompt
 - Use appropriate element types for the content
 - Ensure valid JSON syntax
+- Always return exactly one JSON object that starts with "{" and ends with "}"
+- Use double-quoted keys/strings and include all required commas/brackets
 - Omit image elements if you don't have real URLs
-- Return ONLY valid JSON, no markdown or explanations`,
+- Return ONLY valid JSON, no markdown, no explanations, and no reasoning text`,
     prompt: `Generate a PDF document for: ${text}`,
   })
 

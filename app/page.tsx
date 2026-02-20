@@ -35,13 +35,15 @@ export default function Home() {
 
       const decoder = new TextDecoder()
       let accumulatedText = ''
+      let pendingLine = ''
 
       while (true) {
         const { done, value } = await reader.read()
         if (done) break
 
-        const chunk = decoder.decode(value, { stream: true })
-        const lines = chunk.split('\n')
+        pendingLine += decoder.decode(value, { stream: true })
+        const lines = pendingLine.split('\n')
+        pendingLine = lines.pop() ?? ''
 
         for (const line of lines) {
           if (line.startsWith('data:')) {
@@ -56,6 +58,20 @@ export default function Home() {
             } catch {
               // Skip invalid JSON
             }
+          }
+        }
+      }
+
+      if (pendingLine.startsWith('data:')) {
+        const data = pendingLine.slice(5).trim()
+        if (data && data !== '[DONE]') {
+          try {
+            const parsed = JSON.parse(data)
+            if (parsed.type === 'text-delta' && typeof parsed.delta === 'string') {
+              accumulatedText += parsed.delta
+            }
+          } catch {
+            // Skip invalid JSON
           }
         }
       }

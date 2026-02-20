@@ -24,7 +24,7 @@ export async function POST(req: Request) {
   }
 
   const result = streamText({
-    model: 'openai/gpt-4-turbo',
+    model: 'openrouter/minimax/minimax-m2.5',
     system: `You are a PDF document generator. Generate a valid JSON document specification based on the user's prompt.
 The JSON must conform to this structure:
 {

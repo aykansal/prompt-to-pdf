@@ -36,6 +36,7 @@ interface ConversationState {
 const STORAGE_KEY = "prompt-to-pdf-conversations";
 
 export function useConversation() {
+  const [isLoaded, setIsLoaded] = useState(false);
   const [state, setState] = useState<ConversationState>({
     conversations: [],
     currentConversationId: null,
@@ -49,24 +50,28 @@ export function useConversation() {
       if (stored) {
         const parsed = JSON.parse(stored);
         setState({
-          conversations: parsed.conversations || [],
-          currentConversationId: parsed.currentConversationId || null,
-          currentPdfVersionId: parsed.currentPdfVersionId || null,
+          conversations: parsed.conversations,
+          currentConversationId: parsed.currentConversationId,
+          currentPdfVersionId: parsed.currentPdfVersionId,
         });
       }
     } catch (error) {
       console.error("Failed to load conversations:", error);
+    } finally {
+      setIsLoaded(true);
     }
   }, []);
 
-  // Save to localStorage whenever state changes
+  // Save to localStorage whenever state changes (but only after initial load)
   useEffect(() => {
+    if (!isLoaded) return;
+    
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch (error) {
       console.error("Failed to save conversations:", error);
     }
-  }, [state]);
+  }, [state, isLoaded]);
 
   const generateId = () => `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 

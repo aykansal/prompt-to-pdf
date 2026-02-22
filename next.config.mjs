@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  serverExternalPackages: ["@react-pdf/renderer", "@json-render/react-pdf"],
   typescript: {
     ignoreBuildErrors: true,
   },

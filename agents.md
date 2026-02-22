@@ -1,0 +1,4 @@
+- Use TypeScript strict mode
+- All API responses must include error handling
+- Follow REST naming conventions for endpoints
+- Always use edit file tool to modify files instead of creating new ones
